@@ -1,0 +1,5 @@
+radvd:
+  conf_dir: /etc
+  conf_ext: conf
+  pkgs: ['radvd']
+  service: radvd

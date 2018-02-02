@@ -1,0 +1,35 @@
+radvd:
+  interfaces:
+    eth0:
+      prefix:
+        2001:db8:987::1/64:
+
+    eth1:
+      IgnoreIfMissing: false
+      prefix:
+        2001:db8:123::1/64:
+          AdvOnLink: false
+        2001:db8:abc::1/64:
+
+      clients:
+        - 2001:db8:123::10
+        - 2001:db8:abc::ffff
+
+      route:
+        2001:db8:cde::1/64:
+          AdvRouteLifetime: infinity
+          RemoveRoute: false
+
+      RDNSS:
+        2001:db8:ffff::1 2001:db8:ffff::2 2001:db8:ffff::3:
+          FlushRDNSS: false
+
+      DNSSL:
+        example.com example.org:
+          AdvDNSSLLifetime: 16000
+        example.net:
+
+     # Requires recent radvd daemon
+      abro:
+        2001:0db8:85a3::/48:
+          AdvValidLifeTime: 0

@@ -1,0 +1,247 @@
+# radvd server configuration
+# Managed by Salt
+# Template: {{ source }}
+
+{%- for interface, iface_data in config['interfaces'].iteritems() %}
+{%- set spacing = false %}
+
+interface {{ interface }}
+{
+{%-   if iface_data['IgnoreIfMissing'] is defined and not iface_data['IgnoreIfMissing'] %}
+{%-     set spacing = true %}
+    IgnoreIfMissing off;
+{%-   endif %}
+
+{%-   if iface_data['AdvSendAdvert'] is defined and iface_data['AdvSendAdvert'] %}
+{%-     set spacing = true %}
+    AdvSendAdvert on;
+{%-   endif %}
+
+{%-   if iface_data['UnicastOnly'] is defined and iface_data['UnicastOnly'] %}
+{%-     set spacing = true %}
+    UnicastOnly on;
+{%-   endif %}
+
+{%-   if iface_data['MaxRtrAdvInterval'] is defined %}
+{%-     set spacing = true %}
+    MaxRtrAdvInterval {{ iface_data['MaxRtrAdvInterval'] }};
+{%-   endif %}
+
+{%-   if iface_data['MinRtrAdvInterval'] is defined %}
+{%-     set spacing = true %}
+    MinRtrAdvInterval {{ iface_data['MinRtrAdvInterval'] }};
+{%-   endif %}
+
+{%-   if iface_data['MinDelayBetweenRAs'] is defined %}
+{%-     set spacing = true %}
+    MinDelayBetweenRAs {{ iface_data['MinDelayBetweenRAs'] }};
+{%-   endif %}
+
+{%-   if iface_data['AdvManagedFlag'] is defined and iface_data['AdvManagedFlag'] %}
+{%-     set spacing = true %}
+    AdvManagedFlag on;
+{%-   endif %}
+
+{%-   if iface_data['AdvOtherConfigFlag'] is defined and iface_data['AdvOtherConfigFlag'] %}
+{%-     set spacing = true %}
+    AdvOtherConfigFlag on;
+{%-   endif %}
+
+{%-   if iface_data['AdvLinkMTU'] is defined %}
+{%-     set spacing = true %}
+    AdvLinkMTU {{ iface_data['AdvLinkMTU'] }};
+{%-   endif %}
+
+{%-   if iface_data['AdvReachableTime'] is defined %}
+{%-     set spacing = true %}
+    AdvReachableTime {{ iface_data['AdvReachableTime'] }};
+{%-   endif %}
+
+{%-   if iface_data['AdvRetransTimer'] is defined %}
+{%-     set spacing = true %}
+    AdvRetransTimer {{ iface_data['AdvRetransTimer'] }};
+{%-   endif %}
+
+{%-   if iface_data['AdvCurHopLimit'] is defined %}
+{%-     set spacing = true %}
+    AdvCurHopLimit {{ iface_data['AdvCurHopLimit'] }};
+{%-   endif %}
+
+{%-   if iface_data['AdvDefaultLifetime'] is defined %}
+{%-     set spacing = true %}
+    AdvDefaultLifetime {{ iface_data['AdvDefaultLifetime'] }};
+{%-   endif %}
+
+{%-   if iface_data['AdvDefaultPreference'] is defined %}
+{%-     set spacing = true %}
+    AdvDefaultPreference {{ iface_data['AdvDefaultPreference'] }};
+{%-   endif %}
+
+{%-   if iface_data['AdvSourceLLAddress'] is defined and not iface_data['AdvSourceLLAddress'] %}
+{%-     set spacing = true %}
+    AdvSourceLLAddress off;
+{%-   endif %}
+
+{%-   if iface_data['AdvHomeAgentFlag'] is defined and iface_data['AdvHomeAgentFlag'] %}
+{%-     set spacing = true %}
+    AdvHomeAgentFlag on;
+{%-   endif %}
+
+{%-   if iface_data['AdvHomeAgentInfo'] is defined and iface_data['AdvHomeAgentInfo'] %}
+{%-     set spacing = true %}
+    AdvHomeAgentInfo on;
+{%-   endif %}
+
+{%-   if iface_data['HomeAgentLifetime'] is defined %}
+{%-     set spacing = true %}
+    HomeAgentLifetime {{ iface_data['HomeAgentLifetime'] }};
+{%-   endif %}
+
+{%-   if iface_data['HomeAgentPreference'] is defined %}
+{%-     set spacing = true %}
+    HomeAgentPreference {{ iface_data['HomeAgentPreference'] }};
+{%-   endif %}
+
+{%-   if iface_data['AdvMobRtrSupportFlag'] is defined and iface_data['AdvMobRtrSupportFlag'] %}
+{%-     set spacing = true %}
+    AdvMobRtrSupportFlag on;
+{%-   endif %}
+
+{%-   if iface_data['AdvIntervalOpt'] is defined and iface_data['AdvIntervalOpt'] %}
+{%-     set spacing = true %}
+    AdvIntervalOpt on;
+{%-   endif %}
+
+{%-   if iface_data['prefix'] is defined %}
+{%-     for prefix, prefix_data in iface_data['prefix'].iteritems() %}
+{%-       if spacing %}
+{%        endif %}
+{%-       set spacing = true %}
+    prefix {{ prefix }} {
+{%-       if prefix_data['AdvOnLink'] is defined and not prefix_data['AdvOnLink'] %}
+        AdvOnLink off;
+{%-       endif %}
+
+{%-       if prefix_data['AdvAutonomous'] is defined and not prefix_data['AdvAutonomous'] %}
+        AdvAutonomous off;
+{%-       endif %}
+
+{%-       if prefix_data['AdvRouterAddr'] is defined and prefix_data['AdvRouterAddr'] %}
+        AdvRouterAddr on;
+{%-       endif %}
+
+{%-       if prefix_data['AdvValidLifetime'] is defined %}
+        AdvValidLifetime {{ prefix_data['AdvValidLifetime'] }};
+{%-       endif %}
+
+{%-       if prefix_data['AdvPreferredLifetime'] is defined %}
+        AdvPreferredLifetime {{ prefix_data['AdvPreferredLifetime'] }};
+{%-       endif %}
+
+{%-       if prefix_data['DeprecatePrefix'] is defined and prefix_data['DeprecatePrefix'] %}
+        DeprecatePrefix on;
+{%-       endif %}
+
+{%-       if prefix_data['DecrementLifetimes'] is defined and prefix_data['DecrementLifetimes'] %}
+        DecrementLifetimes on;
+{%-       endif %}
+
+{%-       if prefix_data['Base6Interface'] is defined %}
+        Base6Interface {{ prefix_data['Base6Interface'] }};
+{%-       endif %}
+
+{%-       if prefix_data['Base6to4Interface'] is defined %}
+        Base6to4Interface {{ prefix_data['Base6to4Interface'] }};
+{%-       endif %}
+    }; # End of prefix definition
+{%-     endfor %}
+{%-   endif %}
+
+{%-   if iface_data['clients'] is defined %}
+{%-     if spacing %}
+{%      endif %}
+{%-     set spacing = true %}
+    clients {
+{%-     for client in iface_data['clients'] %}
+        {{ client }};
+{%-     endfor %}
+    }; # End of clients definition
+{%-   endif %}
+
+{%-   if iface_data['route'] is defined %}
+{%-     for route, route_data in iface_data['route'].iteritems() %}
+{%-       if spacing %}
+{%        endif %}
+{%-       set spacing = true %}
+    route {{ route }} {
+{%-       if route_data['AdvRouteLifetime'] is defined %}
+        AdvRouteLifetime {{ route_data['AdvRouteLifetime'] }};
+{%-       endif %}
+
+{%-       if route_data['AdvRoutePreference'] is defined %}
+        AdvRoutePreference {{ route_data['AdvRoutePreference'] }};
+{%-       endif %}
+
+{%-       if route_data['RemoveRoute'] is defined and not route_data['RemoveRoute'] %}
+        RemoveRoute off;
+{%-       endif %}
+    }; # End of route definition
+{%-     endfor %}
+{%-   endif %}
+
+{%-   if iface_data['RDNSS'] is defined %}
+{%-     for RDNSS, RDNSS_data in iface_data['RDNSS'].iteritems() %}
+{%-       if spacing %}
+{%        endif %}
+{%-       set spacing = true %}
+    RDNSS {{ RDNSS }} {
+{%-       if RDNSS_data['AdvRDNSSLifetime'] is defined %}
+        AdvRDNSSLifetime {{ RDNSS_data['AdvRDNSSLifetime'] }};
+{%-       endif %}
+
+{%-       if RDNSS_data['FlushRDNSS'] is defined and not RDNSS_data['FlushRDNSS'] %}
+        FlushRDNSS off;
+{%-       endif %}
+    }; # End of RDNSS definition
+{%-     endfor %}
+{%-   endif %}
+
+{%-   if iface_data['DNSSL'] is defined %}
+{%-     for DNSSL, DNSSL_data in iface_data['DNSSL'].iteritems() %}
+{%-       if spacing %}
+{%        endif %}
+{%-       set spacing = true %}
+    DNSSL {{ DNSSL }} {
+{%-       if DNSSL_data['AdvDNSSLLifetime'] is defined %}
+        AdvDNSSLLifetime {{ DNSSL_data['AdvDNSSLLifetime'] }};
+{%-       endif %}
+
+{%-       if DNSSL_data['FlushDNSSL'] is defined and not DNSSL_data['FlushDNSSL'] %}
+        FlushDNSSL off;
+{%-       endif %}
+    }; # End of DNSSL definition
+{%-     endfor %}
+{%-   endif %}
+
+{%-   if iface_data['abro'] is defined %}
+{%-     for abro, abro_data in iface_data['abro'].iteritems() %}
+{%-       if spacing %}
+{%        endif %}
+{%-       set spacing = true %}
+    abro {{ abro }} {
+{%-       if abro_data['AdvValidLifeTime'] is defined %}
+        AdvValidLifeTime {{ abro_data['AdvValidLifeTime'] }};
+{%-       endif %}
+
+{%-       if abro_data['AdvVersionLow'] is defined %}
+        AdvVersionLow {{ abro_data['AdvVersionLow'] }};
+{%-       endif %}
+
+{%-       if abro_data['AdvVersionHigh'] is defined %}
+        AdvVersionHigh {{ abro_data['AdvVersionHigh'] }};
+{%-       endif %}
+    }; # End of abro definition
+{%-     endfor %}
+{%-   endif %}
+}; # End of interface definition
+{%- endfor %}

@@ -1,0 +1,4 @@
+FreeBSD:
+  conf_dir: /usr/local/etc
+Gentoo:
+  pkgs: ['net-misc/radvd']
