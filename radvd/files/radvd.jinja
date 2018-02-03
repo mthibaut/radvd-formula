@@ -113,48 +113,55 @@ interface {{ interface }}
 {%-   endif %}
 
 {%-   if iface_data['prefix'] is defined %}
-{%-     for prefix, prefix_data in iface_data['prefix'].iteritems() %}
+{%-     if iface_data['prefix'] is not mapping %}
 {%-       if spacing %}
 {%        endif %}
-{%-       set spacing = true %}
+    prefix {{ iface_data['prefix'] }} {
+    };
+{%-     else %}
+{%-       for prefix, prefix_data in iface_data['prefix'].iteritems() %}
+{%-         if spacing %}
+{%          endif %}
+{%-         set spacing = true %}
     prefix {{ prefix }} {
-{%-       if prefix_data['AdvOnLink'] is defined and not prefix_data['AdvOnLink'] %}
+{%-         if prefix_data['AdvOnLink'] is defined and not prefix_data['AdvOnLink'] %}
         AdvOnLink off;
-{%-       endif %}
+{%-         endif %}
 
-{%-       if prefix_data['AdvAutonomous'] is defined and not prefix_data['AdvAutonomous'] %}
+{%-         if prefix_data['AdvAutonomous'] is defined and not prefix_data['AdvAutonomous'] %}
         AdvAutonomous off;
-{%-       endif %}
+{%-         endif %}
 
-{%-       if prefix_data['AdvRouterAddr'] is defined and prefix_data['AdvRouterAddr'] %}
+{%-         if prefix_data['AdvRouterAddr'] is defined and prefix_data['AdvRouterAddr'] %}
         AdvRouterAddr on;
-{%-       endif %}
+{%-         endif %}
 
-{%-       if prefix_data['AdvValidLifetime'] is defined %}
+{%-         if prefix_data['AdvValidLifetime'] is defined %}
         AdvValidLifetime {{ prefix_data['AdvValidLifetime'] }};
-{%-       endif %}
+{%-         endif %}
 
-{%-       if prefix_data['AdvPreferredLifetime'] is defined %}
+{%-         if prefix_data['AdvPreferredLifetime'] is defined %}
         AdvPreferredLifetime {{ prefix_data['AdvPreferredLifetime'] }};
-{%-       endif %}
+{%-         endif %}
 
-{%-       if prefix_data['DeprecatePrefix'] is defined and prefix_data['DeprecatePrefix'] %}
+{%-         if prefix_data['DeprecatePrefix'] is defined and prefix_data['DeprecatePrefix'] %}
         DeprecatePrefix on;
-{%-       endif %}
+{%-         endif %}
 
-{%-       if prefix_data['DecrementLifetimes'] is defined and prefix_data['DecrementLifetimes'] %}
+{%-         if prefix_data['DecrementLifetimes'] is defined and prefix_data['DecrementLifetimes'] %}
         DecrementLifetimes on;
-{%-       endif %}
+{%-         endif %}
 
-{%-       if prefix_data['Base6Interface'] is defined %}
+{%-         if prefix_data['Base6Interface'] is defined %}
         Base6Interface {{ prefix_data['Base6Interface'] }};
-{%-       endif %}
+{%-         endif %}
 
-{%-       if prefix_data['Base6to4Interface'] is defined %}
+{%-         if prefix_data['Base6to4Interface'] is defined %}
         Base6to4Interface {{ prefix_data['Base6to4Interface'] }};
-{%-       endif %}
+{%-         endif %}
     }; # End of prefix definition
-{%-     endfor %}
+{%-       endfor %}
+{%-     endif %}
 {%-   endif %}
 
 {%-   if iface_data['clients'] is defined %}
