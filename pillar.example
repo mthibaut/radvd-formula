@@ -1,11 +1,12 @@
 radvd:
   interfaces:
-    eth0:
+    eth21:
       prefix:
         2001:db8:987::1/64:
 
-    eth1:
-      IgnoreIfMissing: false
+    eth32:
+      AdvManagedFlag: true
+
       prefix:
         2001:db8:123::1/64:
           AdvOnLink: false
@@ -29,7 +30,9 @@ radvd:
           AdvDNSSLLifetime: 16000
         example.net:
 
-     # Requires recent radvd daemon
+{% if grains['os_family'] != 'RedHat' %}
+     # Requires recent radvd daemon (not present on RedHat)
       abro:
         2001:0db8:85a3::/48:
           AdvValidLifeTime: 0
+{% endif %}

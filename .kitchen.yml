@@ -1,0 +1,44 @@
+driver:
+  name: docker
+  use_sudo: true
+  privileged: true
+  forward:
+    - 80
+
+transport:
+  name: sftp
+
+platforms:
+  - name: centos-7
+    driver_config:
+      run_command: /usr/lib/systemd/systemd
+  - name: ubuntu-16.04
+  - name: debian
+
+suites:
+  - name: nitrogen
+    provisioner:
+      salt_bootstrap_options: -X -p git stable 2017.7
+  - name: carbon
+    provisioner:
+      salt_bootstrap_options: -X -p git stable 2016.11
+
+provisioner:
+  name: salt_solo
+  salt_install: bootstrap
+  is_file_root: true
+  require_chef: false
+  salt_copy_filter:
+    - .git
+  state_top:
+    base:
+      "*":
+        - radvd
+        - radvd.config
+  pillars:
+    top.sls:
+      base:
+        "*":
+          - radvd
+  pillars-from-files:
+    radvd.sls: pillar.example
