@@ -2,6 +2,8 @@
 radvd
 =====
 
+[![Build Status](https://travis-ci.org/mthibaut/radvd-formula.png)](https://travis-ci.org/mthibaut/radvd-formula)
+
 Formula to install and configure the IPv6 radvd server.
 
 .. note::
