@@ -251,7 +251,7 @@ interface {{ interface }}
 {%-     else %}
 {%-       set abro_dict = iface_data['abro'] %}
 {%-     endif %}
-{%-     for abro, abro_data in abro_dictiteritems() %}
+{%-     for abro, abro_data in abro_dict.iteritems() %}
 {%-       if spacing %}
 {%        endif %}
 {%-       set spacing = true %}
