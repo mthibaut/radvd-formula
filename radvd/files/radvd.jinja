@@ -4,7 +4,9 @@
 
 {%- for interface, iface_data in config['interfaces'].iteritems() %}
 {%- set spacing = false %}
-
+{% if iface_data['comment'] is defined %}
+# {{ iface_data['comment'] }}
+{%- endif %}
 interface {{ interface }}
 {
 {%-   if iface_data['IgnoreIfMissing'] is defined and not iface_data['IgnoreIfMissing'] %}
@@ -114,54 +116,52 @@ interface {{ interface }}
 
 {%-   if iface_data['prefix'] is defined %}
 {%-     if iface_data['prefix'] is not mapping %}
+{%-       set prefixes = { iface_data['prefix']: {} } %}
+{%-     else %}
+{%-       set prefixes = iface_data['prefix'] %}
+{%-     endif %}
+{%-     for prefix, prefix_data in prefixes.iteritems() %}
 {%-       if spacing %}
 {%        endif %}
-    prefix {{ iface_data['prefix'] }} {
-    };
-{%-     else %}
-{%-       for prefix, prefix_data in iface_data['prefix'].iteritems() %}
-{%-         if spacing %}
-{%          endif %}
-{%-         set spacing = true %}
+{%-       set spacing = true %}
     prefix {{ prefix }} {
-{%-         if prefix_data['AdvOnLink'] is defined and not prefix_data['AdvOnLink'] %}
+{%-       if prefix_data['AdvOnLink'] is defined and not prefix_data['AdvOnLink'] %}
         AdvOnLink off;
-{%-         endif %}
+{%-       endif %}
 
-{%-         if prefix_data['AdvAutonomous'] is defined and not prefix_data['AdvAutonomous'] %}
+{%-       if prefix_data['AdvAutonomous'] is defined and not prefix_data['AdvAutonomous'] %}
         AdvAutonomous off;
-{%-         endif %}
+{%-       endif %}
 
-{%-         if prefix_data['AdvRouterAddr'] is defined and prefix_data['AdvRouterAddr'] %}
+{%-       if prefix_data['AdvRouterAddr'] is defined and prefix_data['AdvRouterAddr'] %}
         AdvRouterAddr on;
-{%-         endif %}
+{%-       endif %}
 
-{%-         if prefix_data['AdvValidLifetime'] is defined %}
+{%-       if prefix_data['AdvValidLifetime'] is defined %}
         AdvValidLifetime {{ prefix_data['AdvValidLifetime'] }};
-{%-         endif %}
+{%-       endif %}
 
-{%-         if prefix_data['AdvPreferredLifetime'] is defined %}
+{%-       if prefix_data['AdvPreferredLifetime'] is defined %}
         AdvPreferredLifetime {{ prefix_data['AdvPreferredLifetime'] }};
-{%-         endif %}
+{%-       endif %}
 
-{%-         if prefix_data['DeprecatePrefix'] is defined and prefix_data['DeprecatePrefix'] %}
+{%-       if prefix_data['DeprecatePrefix'] is defined and prefix_data['DeprecatePrefix'] %}
         DeprecatePrefix on;
-{%-         endif %}
+{%-       endif %}
 
-{%-         if prefix_data['DecrementLifetimes'] is defined and prefix_data['DecrementLifetimes'] %}
+{%-       if prefix_data['DecrementLifetimes'] is defined and prefix_data['DecrementLifetimes'] %}
         DecrementLifetimes on;
-{%-         endif %}
+{%-       endif %}
 
-{%-         if prefix_data['Base6Interface'] is defined %}
+{%-       if prefix_data['Base6Interface'] is defined %}
         Base6Interface {{ prefix_data['Base6Interface'] }};
-{%-         endif %}
+{%-       endif %}
 
-{%-         if prefix_data['Base6to4Interface'] is defined %}
+{%-       if prefix_data['Base6to4Interface'] is defined %}
         Base6to4Interface {{ prefix_data['Base6to4Interface'] }};
-{%-         endif %}
+{%-       endif %}
     }; # End of prefix definition
-{%-       endfor %}
-{%-     endif %}
+{%-     endfor %}
 {%-   endif %}
 
 {%-   if iface_data['clients'] is defined %}
@@ -176,7 +176,12 @@ interface {{ interface }}
 {%-   endif %}
 
 {%-   if iface_data['route'] is defined %}
-{%-     for route, route_data in iface_data['route'].iteritems() %}
+{%-     if iface_data['route'] is not mapping %}
+{%-       set routes = { iface_data['route']: {} } %}
+{%-     else %}
+{%-       set routes = iface_data['route'] %}
+{%-     endif %}
+{%-     for route, route_data in routes.iteritems() %}
 {%-       if spacing %}
 {%        endif %}
 {%-       set spacing = true %}
@@ -197,7 +202,12 @@ interface {{ interface }}
 {%-   endif %}
 
 {%-   if iface_data['RDNSS'] is defined %}
-{%-     for RDNSS, RDNSS_data in iface_data['RDNSS'].iteritems() %}
+{%-     if iface_data['RDNSS'] is not mapping %}
+{%-       set rdnss_dict = { iface_data['RDNSS']: {} } %}
+{%-     else %}
+{%-       set rdnss_dict = iface_data['RDNSS'] %}
+{%-     endif %}
+{%-     for RDNSS, RDNSS_data in rdnss_dict.iteritems() %}
 {%-       if spacing %}
 {%        endif %}
 {%-       set spacing = true %}
@@ -214,7 +224,12 @@ interface {{ interface }}
 {%-   endif %}
 
 {%-   if iface_data['DNSSL'] is defined %}
-{%-     for DNSSL, DNSSL_data in iface_data['DNSSL'].iteritems() %}
+{%-     if iface_data['DNSSL'] is not mapping %}
+{%-       set dnssl_dict = { iface_data['DNSSL']: {} } %}
+{%-     else %}
+{%-       set dnssl_dict = iface_data['DNSSL'] %}
+{%-     endif %}
+{%-     for DNSSL, DNSSL_data in dnssl_dict.iteritems() %}
 {%-       if spacing %}
 {%        endif %}
 {%-       set spacing = true %}
@@ -231,7 +246,12 @@ interface {{ interface }}
 {%-   endif %}
 
 {%-   if iface_data['abro'] is defined %}
-{%-     for abro, abro_data in iface_data['abro'].iteritems() %}
+{%-     if iface_data['abro'] is not mapping %}
+{%-       set abro_dict = { iface_data['abro']: {} } %}
+{%-     else %}
+{%-       set abro_dict = iface_data['abro'] %}
+{%-     endif %}
+{%-     for abro, abro_data in abro_dictiteritems() %}
 {%-       if spacing %}
 {%        endif %}
 {%-       set spacing = true %}

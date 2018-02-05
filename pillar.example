@@ -1,6 +1,7 @@
 radvd:
   interfaces:
     eth21:
+      comment: Outside
       prefix:
         2001:db8:987::1/64:
 
